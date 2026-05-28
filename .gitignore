@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+
+# SQLite
+*.db
+
+# Node
+node_modules/
+
+# Environment
+.env
+
+# VS Code
+.vscode/
+
+# Redis
+dump.rdb
