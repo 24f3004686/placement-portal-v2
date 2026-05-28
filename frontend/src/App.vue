@@ -25,10 +25,17 @@
       </button>
 
       <button
-        class="btn btn-outline-warning"
+        class="btn btn-outline-warning me-2"
         @click="currentPage = 'company-register'"
       >
         Company
+      </button>
+
+      <button
+        class="btn btn-danger"
+        @click="logout"
+      >
+        Logout
       </button>
 
     </div>
@@ -108,6 +115,16 @@ export default {
 
       this.currentPage = page
 
+    },
+
+    logout() {
+
+      localStorage.removeItem("token")
+
+      this.currentPage = "login"
+
+      alert("Logged Out")
+
     }
 
   }
@@ -127,3 +144,4 @@ body {
 }
 
 </style>
+

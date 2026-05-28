@@ -32,6 +32,11 @@ class User(db.Model):
         db.DateTime,
         server_default=db.func.now()
     )
+    
+    is_active = db.Column(
+    db.Boolean,
+    default=True
+    )
 
     def __repr__(self):
         return f"<User {self.email}>"

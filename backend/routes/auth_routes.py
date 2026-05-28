@@ -7,6 +7,7 @@ from flask_jwt_extended import create_access_token
 from models.user import User
 from models.student import Student
 from models.company import Company
+from models.job import JobPosition
 
 
 auth_bp = Blueprint(
@@ -158,3 +159,6 @@ def login():
         "token": access_token,
         "role": user.role
     }), 200
+
+
+# DASHBOARD STATS
