@@ -3,14 +3,9 @@ from extensions import db
 
 class JobPosition(db.Model):
 
-    __tablename__ = "job_positions"
-
-    id = db.Column(db.Integer, primary_key=True)
-
-    company_id = db.Column(
+    id = db.Column(
         db.Integer,
-        db.ForeignKey("companies.id"),
-        nullable=False
+        primary_key=True
     )
 
     title = db.Column(
@@ -18,24 +13,24 @@ class JobPosition(db.Model):
         nullable=False
     )
 
-    description = db.Column(db.Text)
+    skills_required = db.Column(
+        db.String(200)
+    )
 
-    salary = db.Column(db.Float)
+    salary = db.Column(
+        db.String(50)
+    )
 
-    skills_required = db.Column(db.Text)
-
-    deadline = db.Column(db.Date)
+    benefits = db.Column(
+        db.String(200)
+    )
 
     status = db.Column(
         db.String(20),
-        default="Pending"
+        default="Active"
     )
 
-    company = db.relationship(
-        "Company",
-        backref="jobs",
-        lazy=True
+    company_id = db.Column(
+        db.Integer,
+        db.ForeignKey("company.id")
     )
-
-    def __repr__(self):
-        return f"<Job {self.title}>"

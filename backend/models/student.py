@@ -3,7 +3,7 @@ from extensions import db
 
 class Student(db.Model):
 
-    __tablename__ = "students"
+    __tablename__ = "student"
 
     id = db.Column(db.Integer, primary_key=True)
 
