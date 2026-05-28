@@ -1,8 +1,8 @@
 from flask import Flask
 
 from config import Config
-from extensions import db, bcrypt
-
+from extensions import db, bcrypt, jwt
+from flask_cors import CORS
 # Import models
 import models
 
@@ -15,13 +15,14 @@ from routes.job_routes import job_bp
 
 
 app = Flask(__name__)
-
+CORS(app)
 # Load config
 app.config.from_object(Config)
 
 # Initialize extensions
 db.init_app(app)
 bcrypt.init_app(app)
+jwt.init_app(app)
 
 # Create database tables
 with app.app_context():
