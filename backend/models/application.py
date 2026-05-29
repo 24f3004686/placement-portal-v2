@@ -13,10 +13,6 @@ class Application(db.Model):
         default="Applied"
     )
 
-    feedback = db.Column(
-        db.String(200)
-    )
-
     student_id = db.Column(
         db.Integer,
         db.ForeignKey("student.id")
@@ -25,4 +21,11 @@ class Application(db.Model):
     job_id = db.Column(
         db.Integer,
         db.ForeignKey("job_position.id")
+    )
+    interview_date = db.Column(
+        db.String(100)
+    )
+
+    feedback = db.Column(
+        db.Text
     )

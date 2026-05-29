@@ -9,6 +9,8 @@ from flask_jwt_extended import (
 from extensions import db
 
 from models.job import JobPosition
+from models.application import Application
+
 
 
 company_bp = Blueprint(
@@ -203,3 +205,68 @@ def delete_job(job_id):
     return jsonify({
         "message": "Job deleted"
     }), 200
+
+
+@company_bp.route("/schedule-interview/<int:application_id>", methods=["PUT"])
+@jwt_required()
+def schedule_interview(application_id):
+
+    application = Application.query.get(application_id)
+
+    if not application:
+        return jsonify({"message": "Application not found"}), 404
+
+    data = request.get_json()
+
+    application.status = "Interview Scheduled"
+
+    application.interview_date = data.get("interview_date")
+
+    db.session.commit()
+
+    return jsonify({
+        "message": "Interview Scheduled"
+    }), 200
+    
+    
+@company_bp.route("/feedback/<int:application_id>", methods=["PUT"])
+@jwt_required()
+def add_feedback(application_id):
+
+    application = Application.query.get(application_id)
+
+    if not application:
+        return jsonify({"message": "Application not found"}), 404
+
+    data = request.get_json()
+
+    application.feedback = data.get("feedback")
+
+    db.session.commit()
+
+    return jsonify({
+        "message": "Feedback Added"
+    }), 200
+    
+    
+    
+@company_bp.route("/select/<int:application_id>", methods=["PUT"])
+@jwt_required()
+def select_candidate(application_id):
+
+    application = Application.query.get(application_id)
+
+    if not application:
+        return jsonify({
+            "message": "Application not found"
+        }), 404
+
+    application.status = "Selected"
+
+    db.session.commit()
+
+    return jsonify({
+        "message": "Candidate Selected"
+    }), 200
+    
+    
