@@ -164,6 +164,8 @@
             <th>ID</th>
 
             <th>Name</th>
+            
+            <th>Profile</th>
 
           </tr>
 
@@ -179,6 +181,16 @@
             <td>{{ student.id }}</td>
 
             <td>{{ student.full_name }}</td>
+
+            <td>
+                 <button
+                       class="btn btn-info btn-sm"
+                       @click="viewStudent(student)"
+                  >
+                    View Profile
+                  </button>
+
+            </td>
 
           </tr>
 
@@ -283,6 +295,26 @@ export default {
       }
 
     },
+
+    async viewStudent(student) {
+
+       alert(
+
+              `Name: ${student.full_name}
+
+              Branch: ${student.branch || "-"}
+
+              CGPA: ${student.cgpa || "-"}
+
+              Graduation Year: ${student.graduation_year || "-"}
+
+              Skills: ${student.skills || "-"}
+
+              Resume: ${student.resume || "-"}`
+
+             )
+
+    }, 
 
 
     async approveCompany(id) {

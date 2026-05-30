@@ -1,157 +1,241 @@
-```vue
 <template>
 
-  <div class="container mt-5">
+<div class="container mt-5">
 
-    <h1 class="text-warning fw-bold mb-4">
-      Company Dashboard
-    </h1>
+<h1 class="text-warning fw-bold mb-4">
+Company Dashboard
+</h1>
 
+<!-- CREATE JOB -->
 
-    <!-- CREATE JOB -->
+<div class="card shadow border-0 p-4 rounded-4 mb-5">
 
-    <div class="card shadow border-0 p-4 rounded-4 mb-5">
+<h3 class="mb-4">Post New Job</h3>
 
-      <h3 class="mb-4">
-        Post New Job
-      </h3>
+<input v-model="title" class="form-control mb-3" placeholder="Job Title">
 
-      <input
-        v-model="title"
-        class="form-control mb-3"
-        placeholder="Job Title"
-      >
+<input v-model="skills_required" class="form-control mb-3" placeholder="Skills Required">
 
-      <input
-        v-model="skills_required"
-        class="form-control mb-3"
-        placeholder="Skills Required"
-      >
+<input v-model="salary" class="form-control mb-3" placeholder="Salary">
 
-      <input
-        v-model="salary"
-        class="form-control mb-3"
-        placeholder="Salary"
-      >
+<input v-model="benefits" class="form-control mb-3" placeholder="Benefits">
 
-      <input
-        v-model="benefits"
-        class="form-control mb-3"
-        placeholder="Benefits"
-      >
+<button class="btn btn-warning" @click="createJob">
+Create Job
+</button>
 
-      <button
-        class="btn btn-warning"
-        @click="createJob"
-      >
-        Create Job
-      </button>
+</div>
 
-    </div>
+<!-- JOBS -->
 
+<div class="card shadow border-0 p-4 rounded-4 mb-5">
 
-    <!-- JOB LIST -->
+<h3 class="mb-4">Posted Jobs</h3>
 
-    <div class="card shadow border-0 p-4 rounded-4">
+<table class="table">
 
-      <h3 class="mb-4">
-        Posted Jobs
-      </h3>
+<thead>
+<tr>
+<th>ID</th>
+<th>Title</th>
+<th>Skills</th>
+<th>Salary</th>
+<th>Status</th>
+<th>Actions</th>
+</tr>
+</thead>
 
-      <table class="table table-hover">
+<tbody>
 
-        <thead>
+<tr v-for="job in jobs" :key="job.id">
 
-          <tr>
+<td>{{ job.id }}</td>
+<td>{{ job.title }}</td>
+<td>{{ job.skills_required }}</td>
+<td>{{ job.salary }}</td>
 
-            <th>ID</th>
+<td>
+<span
+v-if="job.status==='Active'"
+class="badge bg-success">
+Active
+</span>
 
-            <th>Title</th>
+<span
+v-else
+class="badge bg-danger">
+Closed
+</span>
+</td>
 
-            <th>Skills</th>
+<td>
 
-            <th>Salary</th>
+<button
+v-if="job.status==='Active'"
+class="btn btn-warning btn-sm me-2"
+@click="closeJob(job.id)">
+Close
+</button>
 
-            <th>Status</th>
+<button
+v-else
+class="btn btn-success btn-sm me-2"
+@click="reopenJob(job.id)">
+Reopen
+</button>
 
-            <th>Actions</th>
+<button
+class="btn btn-danger btn-sm"
+@click="deleteJob(job.id)">
+Delete
+</button>
 
-          </tr>
+</td>
 
-        </thead>
+</tr>
 
-        <tbody>
+</tbody>
 
-          <tr
-            v-for="job in jobs"
-            :key="job.id"
-          >
+</table>
 
-            <td>{{ job.id }}</td>
+</div>
 
-            <td>{{ job.title }}</td>
+<!-- APPLICATIONS -->
 
-            <td>{{ job.skills_required }}</td>
+<div class="card shadow border-0 p-4 rounded-4">
 
-            <td>{{ job.salary }}</td>
+<h3 class="mb-4">
+Received Applications
+</h3>
 
-            <td>
+<table class="table">
 
-              <span
-                v-if="job.status === 'Active'"
-                class="badge bg-success"
-              >
-                Active
-              </span>
+<thead>
 
-              <span
-                v-else
-                class="badge bg-danger"
-              >
-                Closed
-              </span>
+<tr>
 
-            </td>
+<th>Student</th>
 
-            <td>
+<th>Job</th>
 
-              <button
-                v-if="job.status === 'Active'"
-                class="btn btn-warning btn-sm me-2"
-                @click="closeJob(job.id)"
-              >
-                Close
-              </button>
+<th>Status</th>
 
-              <button
-                v-else
-                class="btn btn-success btn-sm me-2"
-                @click="reopenJob(job.id)"
-              >
-                Reopen
-              </button>
+<th>Interview Date</th>
 
-              <button
-                class="btn btn-danger btn-sm"
-                @click="deleteJob(job.id)"
-              >
-                Delete
-              </button>
+<th>Feedback</th>
 
-            </td>
+<th>Actions</th>
 
-          </tr>
+<th>Profile</th>
 
-        </tbody>
+</tr>
 
-      </table>
+</thead>
 
-    </div>
+<tbody>
 
-  </div>
+<tr
+v-for="app in applications"
+:key="app.application_id"
+>
+
+<td>{{ app.student_name }}</td>
+
+<td>{{ app.job_title }}</td>
+
+<td>{{ app.status }}</td>
+
+<td>
+<input
+v-model="app.interview_date"
+type="date"
+class="form-control"
+/>
+</td>
+
+<td>
+<input
+v-model="app.feedback"
+class="form-control"
+placeholder="Feedback"
+/>
+</td>
+
+<td>
+
+<button
+class="btn btn-primary btn-sm me-1"
+@click="scheduleInterview(app)"
+>
+Interview
+</button>
+
+<button
+class="btn btn-info btn-sm me-1"
+@click="addFeedback(app)"
+>
+Feedback
+</button>
+
+<button
+class="btn btn-success btn-sm me-1"
+@click="updateStatus(app.application_id,'Shortlisted')"
+>
+Shortlist
+</button>
+
+<button
+class="btn btn-warning btn-sm me-1"
+@click="updateStatus(app.application_id,'Selected')"
+>
+Select
+</button>
+
+<button
+class="btn btn-danger btn-sm"
+@click="updateStatus(app.application_id,'Rejected')"
+>
+Reject
+</button>
+
+<button
+  class="btn btn-secondary btn-sm me-1"
+  @click="offer(app.application_id)"
+>
+  Offer
+</button>
+
+<button
+  class="btn btn-dark btn-sm"
+  @click="placed(app.application_id)"
+>
+  Placed
+</button>
+
+</td>
+
+<td>
+
+  <button
+    class="btn btn-info btn-sm"
+    @click="viewStudent(app)"
+  >
+    View Profile
+  </button>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
 
 </template>
-
 
 <script>
 
@@ -159,227 +243,240 @@ import axios from "axios"
 
 export default {
 
-  data() {
+data() {
 
-    return {
+return {
 
-      title: "",
+title: "",
 
-      skills_required: "",
+skills_required: "",
 
-      salary: "",
+salary: "",
 
-      benefits: "",
+benefits: "",
 
-      jobs: []
+jobs: [],
 
+applications: []
+
+}
+
+},
+
+async mounted() {
+
+await this.fetchJobs()
+
+await this.fetchApplications()
+
+},
+
+methods: {
+
+getHeaders() {
+
+return {
+
+Authorization:
+`Bearer ${localStorage.getItem("token")}`
+
+}
+
+},
+
+async fetchJobs() {
+
+const response = await axios.get(
+"http://127.0.0.1:5000/company/jobs",
+{
+headers: this.getHeaders()
+}
+)
+
+this.jobs = response.data
+
+},
+
+async fetchApplications() {
+
+const response = await axios.get(
+"http://127.0.0.1:5000/company/applications",
+{
+headers: this.getHeaders()
+}
+)
+
+this.applications = response.data
+
+},
+
+async createJob() {
+
+await axios.post(
+"http://127.0.0.1:5000/company/create-job",
+{
+title: this.title,
+skills_required: this.skills_required,
+salary: this.salary,
+benefits: this.benefits
+},
+{
+headers: this.getHeaders()
+}
+)
+
+await this.fetchJobs()
+
+},
+
+async closeJob(id) {
+
+await axios.put(
+`http://127.0.0.1:5000/company/close-job/${id}`,
+{},
+{
+headers: this.getHeaders()
+}
+)
+
+await this.fetchJobs()
+
+},
+
+async reopenJob(id) {
+
+await axios.put(
+`http://127.0.0.1:5000/company/reopen-job/${id}`,
+{},
+{
+headers: this.getHeaders()
+}
+)
+
+await this.fetchJobs()
+
+},
+
+async deleteJob(id) {
+
+await axios.delete(
+`http://127.0.0.1:5000/company/delete-job/${id}`,
+{
+headers: this.getHeaders()
+}
+)
+
+await this.fetchJobs()
+
+},
+
+async scheduleInterview(app) {
+
+await axios.put(
+`http://127.0.0.1:5000/company/schedule-interview/${app.application_id}`,
+{
+interview_date: app.interview_date
+},
+{
+headers: this.getHeaders()
+}
+)
+
+alert("Interview Scheduled")
+
+},
+
+async addFeedback(app) {
+
+await axios.put(
+`http://127.0.0.1:5000/company/feedback/${app.application_id}`,
+{
+feedback: app.feedback
+},
+{
+headers: this.getHeaders()
+}
+)
+
+alert("Feedback Added")
+
+},
+
+async offer(id) {
+
+  await axios.put(
+
+    `http://127.0.0.1:5000/company/offer/${id}`,
+
+    {},
+
+    {
+      headers: this.getHeaders()
     }
 
-  },
+  )
 
-  async mounted() {
+  await this.fetchApplications()
 
-    await this.fetchJobs()
+},
 
-  },
+async placed(id) {
 
-  methods: {
+  await axios.put(
 
-    async fetchJobs() {
+    `http://127.0.0.1:5000/company/placed/${id}`,
 
-      try {
+    {},
 
-        const token = localStorage.getItem("token")
-
-        const headers = {
-
-          Authorization: `Bearer ${token}`
-
-        }
-
-        const response = await axios.get(
-
-          "http://127.0.0.1:5000/company/jobs",
-
-          { headers }
-
-        )
-
-        this.jobs = response.data
-
-      }
-
-      catch(error) {
-
-        console.log(error)
-
-      }
-
-    },
-
-
-    async createJob() {
-
-      try {
-
-        const token = localStorage.getItem("token")
-
-        const headers = {
-
-          Authorization: `Bearer ${token}`
-
-        }
-
-        await axios.post(
-
-          "http://127.0.0.1:5000/company/create-job",
-
-          {
-
-            title: this.title,
-
-            skills_required: this.skills_required,
-
-            salary: this.salary,
-
-            benefits: this.benefits
-
-          },
-
-          { headers }
-
-        )
-
-        alert("Job Created Successfully")
-
-        this.title = ""
-
-        this.skills_required = ""
-
-        this.salary = ""
-
-        this.benefits = ""
-
-        await this.fetchJobs()
-
-      }
-
-      catch(error) {
-
-        console.log(error)
-
-        alert("Failed to create job")
-
-      }
-
-    },
-
-
-    async closeJob(id) {
-
-      try {
-
-        const token = localStorage.getItem("token")
-
-        const headers = {
-
-          Authorization: `Bearer ${token}`
-
-        }
-
-        await axios.put(
-
-          `http://127.0.0.1:5000/company/close-job/${id}`,
-
-          {},
-
-          { headers }
-
-        )
-
-        await this.fetchJobs()
-
-      }
-
-      catch(error) {
-
-        console.log(error)
-
-      }
-
-    },
-
-
-    async reopenJob(id) {
-
-      try {
-
-        const token = localStorage.getItem("token")
-
-        const headers = {
-
-          Authorization: `Bearer ${token}`
-
-        }
-
-        await axios.put(
-
-          `http://127.0.0.1:5000/company/reopen-job/${id}`,
-
-          {},
-
-          { headers }
-
-        )
-
-        await this.fetchJobs()
-
-      }
-
-      catch(error) {
-
-        console.log(error)
-
-      }
-
-    },
-
-
-    async deleteJob(id) {
-
-      try {
-
-        const token = localStorage.getItem("token")
-
-        const headers = {
-
-          Authorization: `Bearer ${token}`
-
-        }
-
-        await axios.delete(
-
-          `http://127.0.0.1:5000/company/delete-job/${id}`,
-
-          { headers }
-
-        )
-
-        await this.fetchJobs()
-
-      }
-
-      catch(error) {
-
-        console.log(error)
-
-      }
-
+    {
+      headers: this.getHeaders()
     }
 
-  }
+  )
+
+  await this.fetchApplications()
+
+},
+
+async viewStudent(student) {
+
+    alert(
+
+            `Name: ${student.full_name}
+
+             Branch: ${student.branch || "-"}
+
+             CGPA: ${student.cgpa || "-"}
+
+             Graduation Year: ${student.graduation_year || "-"}
+
+             Skills: ${student.skills || "-"}
+
+             Resume: ${student.resume || "-"}`
+
+         )
+
+},
+
+async updateStatus(id,status) {
+
+await axios.put(
+`http://127.0.0.1:5000/company/update-status/${id}`,
+{
+status: status
+},
+{
+headers: this.getHeaders()
+}
+)
+
+await this.fetchApplications()
+
+}
+
+}
 
 }
 
 </script>
-```
+

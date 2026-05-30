@@ -29,3 +29,7 @@ class Application(db.Model):
     feedback = db.Column(
         db.Text
     )
+    
+    offer_letter = db.Column(
+    db.String(255)
+    )

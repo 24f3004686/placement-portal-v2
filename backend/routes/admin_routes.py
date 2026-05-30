@@ -183,11 +183,40 @@ def get_students():
 
             "id": student.id,
 
-            "full_name": student.full_name
+            "full_name": student.full_name,
+            
+            "branch": student.branch,
+
+            "cgpa": student.cgpa,
+
+            "graduation_year": student.graduation_year,
+
+            "skills": student.skills,
+
+            "resume": student.resume
+
 
         })
 
     return jsonify(student_list), 200
+
+
+@admin_bp.route("/student/<int:student_id>")
+@jwt_required()
+def view_student(student_id):
+
+    student = Student.query.get(student_id)
+
+    return jsonify({
+
+        "name": student.full_name,
+        "branch": student.branch,
+        "cgpa": student.cgpa,
+        "graduation_year": student.graduation_year,
+        "skills": student.skills,
+        "resume": student.resume
+
+    }), 200
 
 
 

@@ -10,7 +10,7 @@ from extensions import db
 
 from models.job import JobPosition
 from models.application import Application
-
+from models.student import Student
 
 
 company_bp = Blueprint(
@@ -270,3 +270,141 @@ def select_candidate(application_id):
     }), 200
     
     
+@company_bp.route("/applications", methods=["GET"])
+@jwt_required()
+def company_applications():
+
+    claims = get_jwt()
+
+    if claims["role"] != "company":
+
+        return jsonify({
+            "message": "Access denied"
+        }), 403
+
+    company_id = int(get_jwt_identity())
+
+    jobs = JobPosition.query.filter_by(
+        company_id=company_id
+    ).all()
+
+    result = []
+
+    for job in jobs:
+
+        applications = Application.query.filter_by(
+            job_id=job.id
+        ).all()
+
+        for app in applications:
+
+            student = Student.query.get(
+                app.student_id
+            )
+
+            result.append({
+                
+                   "application_id": app.id,
+                   "student_id": student.id,
+                   "student_name": student.full_name,
+                   "full_name": student.full_name,
+                   "branch": student.branch,
+                   "cgpa": student.cgpa,
+                   "graduation_year": student.graduation_year,
+                   "skills": student.skills,
+                   "resume": student.resume,
+                   "job_title": job.title,
+                   "status": app.status,
+                   "interview_date": app.interview_date,
+                   "feedback": app.feedback
+
+            })
+
+    return jsonify(result), 200
+
+
+@company_bp.route("/update-status/<int:application_id>", methods=["PUT"])
+@jwt_required()
+def update_status(application_id):
+
+    data = request.get_json()
+
+    application = Application.query.get(application_id)
+
+    if not application:
+
+        return jsonify({
+            "message": "Application not found"
+        }), 404
+
+    application.status = data.get("status")
+
+    db.session.commit()
+
+    return jsonify({
+        "message": "Status updated"
+    }), 200
+    
+@company_bp.route("/offer/<int:application_id>", methods=["PUT"])
+@jwt_required()
+def offer_candidate(application_id):
+
+    application = Application.query.get(application_id)
+
+    if not application:
+
+        return jsonify({
+            "message": "Application not found"
+        }), 404
+
+    application.status = "Offer"
+
+    application.offer_letter = (
+        f"Offer Letter - {application.id}"
+    )
+
+    db.session.commit()
+
+    return jsonify({
+        "message": "Offer Released"
+    }), 200
+    
+    
+@company_bp.route("/placed/<int:application_id>", methods=["PUT"])
+@jwt_required()
+def placed_candidate(application_id):
+
+    application = Application.query.get(application_id)
+
+    if not application:
+
+        return jsonify({
+            "message": "Application not found"
+        }), 404
+
+    application.status = "Placed"
+
+    db.session.commit()
+
+    return jsonify({
+        "message": "Student Placed"
+    }), 200
+    
+    
+@company_bp.route("/student/<int:student_id>")
+@jwt_required()
+def view_student(student_id):
+
+    student = Student.query.get(student_id)
+
+    return jsonify({
+
+        "name": student.full_name,
+        "branch": student.branch,
+        "cgpa": student.cgpa,
+        "graduation_year": student.graduation_year,
+        "skills": student.skills,
+        "resume": student.resume,
+        
+
+    }), 200

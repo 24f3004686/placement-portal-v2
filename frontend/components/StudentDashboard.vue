@@ -152,10 +152,39 @@
 
             <td>
 
-              <span class="badge bg-info">
+              <span
+                v-if="app.status === 'Placed'"
+                class="badge bg-success"
+              >
+                Placed
+              </span>
 
+              <span
+                v-else-if="app.status === 'Offer'"
+                class="badge bg-warning text-dark"
+              >
+                Offer
+              </span>
+
+              <span
+                v-else-if="app.status === 'Rejected'"
+                class="badge bg-danger"
+              >
+                Rejected
+              </span>
+
+              <span
+                v-else-if="app.status === 'Shortlisted'"
+                class="badge bg-primary"
+              >
+                Shortlisted
+              </span>
+
+              <span
+                v-else
+                class="badge bg-info"
+              >
                 {{ app.status }}
-
               </span>
 
             </td>
@@ -175,7 +204,11 @@
             <td>
 
               <button
-                v-if="app.status === 'Selected'"
+                v-if="
+                  app.status === 'Selected' ||
+                  app.status === 'Offer' ||
+                  app.status === 'Placed'
+                "
                 class="btn btn-success btn-sm"
                 @click="downloadOffer(app.id)"
               >
