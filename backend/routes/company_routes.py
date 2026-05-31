@@ -11,6 +11,8 @@ from extensions import db
 from models.job import JobPosition
 from models.application import Application
 from models.student import Student
+from tasks import export_company_csv
+from flask import send_file
 
 
 company_bp = Blueprint(
@@ -408,3 +410,57 @@ def view_student(student_id):
         
 
     }), 200
+    
+    
+@company_bp.route(
+    "/export-csv",
+    methods=["POST"]
+)
+@jwt_required()
+def export_csv():
+
+    company_id = int(
+        get_jwt_identity()
+    )
+
+    task = export_company_csv.delay(
+        company_id
+    )
+
+    return jsonify({
+
+        "message": "Export started",
+        "task_id": task.id
+
+    }), 202
+    
+@company_bp.route(
+    "/download-report/pdf",
+    methods=["GET"]
+)
+@jwt_required()
+def download_pdf():
+
+    return send_file(
+
+        "reports/placement_report.pdf",
+
+        as_attachment=True
+
+    )
+    
+    
+@company_bp.route(
+    "/download-report/html",
+    methods=["GET"]
+)
+@jwt_required()
+def download_html():
+
+    return send_file(
+
+        "reports/placement_report.html",
+
+        as_attachment=True
+
+    )

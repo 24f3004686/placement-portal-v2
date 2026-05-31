@@ -3,6 +3,7 @@ from models.student import Student
 from models.job import JobPosition
 from models.application import Application
 from models.user import User
+from tasks import generate_placement_report
 from flask_jwt_extended import (
     jwt_required,
     get_jwt_identity,
@@ -217,6 +218,26 @@ def view_student(student_id):
         "resume": student.resume
 
     }), 200
+    
+    
+@admin_bp.route(
+    "/generate-report",
+    methods=["POST"]
+)
+@jwt_required()
+def generate_report():
+
+    task = generate_placement_report.delay()
+
+    return jsonify({
+
+        "message":
+        "Report generation started",
+
+        "task_id":
+        task.id
+
+    }), 202
 
 
 

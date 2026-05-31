@@ -6,6 +6,26 @@
       Student Dashboard
     </h1>
 
+    <div
+      v-if="notifications.length"
+      class="alert alert-warning mb-4"
+    >
+
+      <h5>
+       🔔 Notifications
+      </h5>
+
+      <div
+        v-for="n in notifications"
+        :key="n.id"
+      >
+
+        {{ n.message }}
+
+      </div>
+
+    </div>
+
     <!-- PROFILE -->
 
     <div class="card shadow p-4 mb-5">
@@ -50,6 +70,15 @@
       </button>
 
     </div>
+
+    <!-- EXPORT CSV -->
+
+    <button
+      class="btn btn-success mb-4"
+      @click="exportCSV"
+    >
+      Export Applications CSV
+    </button>
 
     <!-- AVAILABLE JOBS -->
 
@@ -112,6 +141,8 @@
       </table>
 
     </div>
+
+
 
     <!-- APPLICATIONS -->
 
@@ -190,15 +221,11 @@
             </td>
 
             <td>
-
               {{ app.interview_date || "-" }}
-
             </td>
 
             <td>
-
               {{ app.feedback || "-" }}
-
             </td>
 
             <td>
@@ -247,7 +274,9 @@ export default {
 
       jobs: [],
 
-      applications: []
+      applications: [],
+
+      notifications: []
 
     }
 
@@ -260,6 +289,8 @@ export default {
     await this.fetchJobs()
 
     await this.fetchApplications()
+
+    await this.fetchNotifications()
 
   },
 
@@ -330,6 +361,80 @@ export default {
       )
 
       this.jobs = response.data
+
+    },
+
+    async fetchNotifications() {
+
+      try {
+
+        const token =
+          localStorage.getItem("token")
+
+        const headers = {
+
+          Authorization:
+            `Bearer ${token}`
+
+        }
+
+        const response =
+          await axios.get(
+
+            "http://127.0.0.1:5000/student/notifications",
+
+            { headers }
+
+          )
+
+        this.notifications =
+          response.data
+
+        if (
+          this.notifications.length > 0
+        ) {
+
+          alert(
+            this.notifications[0].message
+          )
+
+        }
+
+      }
+
+      catch(error) {
+
+        console.log(error)
+
+      }
+
+    },
+
+    async exportCSV() {
+
+      const token =
+        localStorage.getItem("token")
+
+      const headers = {
+
+        Authorization:
+          `Bearer ${token}`
+
+      }
+
+      await axios.post(
+  
+        "http://127.0.0.1:5000/student/export-csv",
+
+        {},
+
+        { headers }
+
+      )
+
+      alert(
+        "CSV export started"
+      )
 
     },
 

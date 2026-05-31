@@ -1,6 +1,7 @@
 from extensions import db
 
 
+
 class Application(db.Model):
 
     id = db.Column(

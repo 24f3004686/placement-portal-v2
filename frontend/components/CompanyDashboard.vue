@@ -108,6 +108,27 @@ Delete
 Received Applications
 </h3>
 
+<button
+  class="btn btn-success mb-3"
+  @click="exportCSV"
+>
+  Export Applications CSV
+</button>
+
+<button
+  class="btn btn-success me-2"
+  @click="downloadPDF"
+>
+  Download PDF
+</button>
+
+<button
+  class="btn btn-warning"
+  @click="downloadHTML"
+>
+  Download HTML
+</button>
+
 <table class="table">
 
 <thead>
@@ -297,6 +318,54 @@ this.jobs = response.data
 
 },
 
+async downloadPDF() {
+
+  const token =
+    localStorage.getItem("token")
+
+  const response =
+    await axios.get(
+
+      "http://127.0.0.1:5000/company/download-report/pdf",
+
+      {
+        responseType: "blob",
+
+        headers: {
+          Authorization:
+            `Bearer ${token}`
+        }
+      }
+
+    )
+
+},
+
+
+async downloadPDF() {
+
+  const token =
+    localStorage.getItem("token")
+
+  const response =
+    await axios.get(
+
+      "http://127.0.0.1:5000/company/download-report/html",
+
+      {
+        responseType: "blob",
+
+        headers: {
+          Authorization:
+            `Bearer ${token}`
+        }
+      }
+
+    )
+
+},
+
+
 async fetchApplications() {
 
 const response = await axios.get(
@@ -455,6 +524,49 @@ async viewStudent(student) {
              Resume: ${student.resume || "-"}`
 
          )
+
+},
+
+async exportCSV() {
+
+  const token =
+    localStorage.getItem("token")
+
+  const headers = {
+
+    Authorization:
+      `Bearer ${token}`
+
+  }
+
+  try {
+
+    const response =
+      await axios.post(
+
+        "http://127.0.0.1:5000/company/export-csv",
+
+        {},
+
+        { headers }
+
+      )
+
+    alert(
+      response.data.message
+    )
+
+  }
+
+  catch(error) {
+
+    console.error(error)
+
+    alert(
+      "Export failed"
+    )
+
+  }
 
 },
 

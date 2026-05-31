@@ -38,7 +38,7 @@ app.register_blueprint(
     student_bp,
     url_prefix="/student"
 )
-print(app.url_map)
+
 
 @app.route("/")
 def home():

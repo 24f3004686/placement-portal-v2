@@ -12,6 +12,8 @@ from models.student import Student
 from models.job import JobPosition
 from models.application import Application
 from models.user import User
+from tasks import export_history_csv
+from models.notification import Notification
 
 
 
@@ -211,3 +213,82 @@ def get_offer_letter(application_id):
         "status": "Selected"
 
     }), 200
+    
+    
+@student_bp.route(
+    "/export-csv",
+    methods=["POST"]
+)
+@jwt_required()
+def export_csv():
+
+    student_id = int(
+        get_jwt_identity()
+    )
+
+    task = export_history_csv.delay(
+        student_id
+    )
+
+    return jsonify({
+
+        "message": "Export started",
+        "task_id": task.id
+
+    }), 202
+    
+    
+@student_bp.route(
+    "/notifications",
+    methods=["GET"]
+)
+@jwt_required()
+def get_notifications():
+
+    student_id = int(
+        get_jwt_identity()
+    )
+
+    notifications = (
+        Notification.query
+        .filter_by(
+            student_id=student_id
+        )
+        .order_by(
+            Notification.created_at.desc()
+        )
+        .all()
+    )
+
+    return jsonify([
+
+        {
+            "id": n.id,
+            "message": n.message,
+            "created_at":
+            str(n.created_at)
+        }
+
+        for n in notifications
+
+    ])
+    
+    
+@student_bp.route(
+    "/notifications-test",
+    methods=["GET"]
+)
+def notifications_test():
+
+    notifications = Notification.query.all()
+
+    return jsonify([
+
+        {
+            "id": n.id,
+            "message": n.message
+        }
+
+        for n in notifications
+
+    ])

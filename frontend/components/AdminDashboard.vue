@@ -6,7 +6,6 @@
       Admin Dashboard
     </h1>
 
-
     <!-- STATS -->
 
     <div class="row mb-5">
@@ -350,6 +349,49 @@ export default {
         console.log(error)
 
         alert("Approval failed")
+
+      }
+
+    },
+
+    async generateReport() {
+
+      const token =
+        localStorage.getItem("token")
+
+      const headers = {
+
+       Authorization:
+         `Bearer ${token}`
+
+      }
+
+      try {
+
+        const response =
+          await axios.post(
+
+            "http://127.0.0.1:5000/admin/generate-report",
+
+            {},
+
+            { headers }
+
+          )
+
+        alert(
+            response.data.message
+        )
+
+    }
+
+    catch(error) {
+
+      console.error(error)
+
+      alert(
+          "Report generation failed"
+      )
 
       }
 
