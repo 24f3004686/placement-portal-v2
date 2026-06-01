@@ -14,6 +14,7 @@ from models.application import Application
 from models.user import User
 from tasks import export_history_csv
 from models.notification import Notification
+from cache import cache
 
 
 
@@ -169,7 +170,10 @@ def my_applications():
 
 @student_bp.route("/jobs", methods=["GET"])
 @jwt_required()
+@cache.cached(timeout=60)
 def get_jobs():
+    
+    print("FETCHING FROM DATABASE")
 
     jobs = JobPosition.query.filter_by(
         status="Active"

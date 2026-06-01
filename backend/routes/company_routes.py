@@ -13,6 +13,8 @@ from models.application import Application
 from models.student import Student
 from tasks import export_company_csv
 from flask import send_file
+from cache import cache
+
 
 
 company_bp = Blueprint(
@@ -75,6 +77,8 @@ def create_job():
     db.session.add(new_job)
 
     db.session.commit()
+    
+    cache.clear()
 
     return jsonify({
         "message": "Job created successfully"

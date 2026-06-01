@@ -13,6 +13,7 @@ from flask_jwt_extended import (
 from extensions import db
 
 from models.company import Company
+from cache import cache
 
 
 admin_bp = Blueprint(
@@ -103,6 +104,7 @@ def dashboard_stats():
 # GET ALL COMPANIES
 @admin_bp.route("/companies", methods=["GET"])
 @jwt_required()
+@cache.cached(timeout=60)
 def get_companies():
 
     claims = get_jwt()
@@ -164,6 +166,7 @@ def delete_company(id):
 # GET ALL STUDENTS
 @admin_bp.route("/students", methods=["GET"])
 @jwt_required()
+@cache.cached(timeout=60)
 def get_students():
 
     claims = get_jwt()

@@ -13,6 +13,7 @@ from routes.company_routes import company_bp
 from routes.student_routes import student_bp
 from routes.job_routes import job_bp
 from routes.student_routes import student_bp
+from cache import cache
 app = Flask(__name__)
 CORS(app)
 # Load config
@@ -22,6 +23,7 @@ app.config.from_object(Config)
 db.init_app(app)
 bcrypt.init_app(app)
 jwt.init_app(app)
+cache.init_app(app)
 
 # Create database tables
 with app.app_context():
