@@ -52,7 +52,8 @@ def interview_reminder():
     with app.app_context():
 
         applications = Application.query.filter(
-            Application.interview_date != None
+            Application.interview_date != None,
+            Application.status == "Interview Scheduled"
         ).all()
 
         for app_obj in applications:
