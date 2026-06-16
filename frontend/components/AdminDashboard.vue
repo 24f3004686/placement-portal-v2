@@ -1,33 +1,37 @@
 <template>
 
-  <div class="container mt-5">
+<div class="container py-5">
 
-    <h1 class="mb-4 text-danger fw-bold">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+
+    <h1 class="fw-bold text-primary">
+      <i class="bi bi-speedometer2 me-2"></i>
       Admin Dashboard
     </h1>
 
-    <!-- STATS -->
-
-    <div class="mb-4">
-
     <button
-    class="btn btn-primary"
-    @click="generateReport"
+      class="btn btn-primary"
+      @click="generateReport"
     >
-
-    Generate Monthly Report
-
+      <i class="bi bi-download me-2"></i>
+      Monthly Report
     </button>
 
-    </div>
+  </div>
 
-    <div class="row mb-5">
+  <!-- Dashboard Cards -->
 
-      <div class="col-md-3">
+  <div class="row g-4 mb-5">
 
-        <div class="card shadow border-0 p-4 text-center rounded-4">
+    <div class="col-lg-3 col-md-6">
 
-          <h5>Total Students</h5>
+      <div class="card dashboard-card shadow-sm border-0 h-100">
+
+        <div class="card-body text-center">
+
+          <i class="bi bi-mortarboard-fill display-4 text-primary mb-3"></i>
+
+          <h6 class="text-muted">Students</h6>
 
           <h2>{{ stats.students }}</h2>
 
@@ -35,12 +39,17 @@
 
       </div>
 
+    </div>
 
-      <div class="col-md-3">
+    <div class="col-lg-3 col-md-6">
 
-        <div class="card shadow border-0 p-4 text-center rounded-4">
+      <div class="card dashboard-card shadow-sm border-0 h-100">
 
-          <h5>Total Companies</h5>
+        <div class="card-body text-center">
+
+          <i class="bi bi-building display-4 text-success mb-3"></i>
+
+          <h6 class="text-muted">Companies</h6>
 
           <h2>{{ stats.companies }}</h2>
 
@@ -48,12 +57,17 @@
 
       </div>
 
+    </div>
 
-      <div class="col-md-3">
+    <div class="col-lg-3 col-md-6">
 
-        <div class="card shadow border-0 p-4 text-center rounded-4">
+      <div class="card dashboard-card shadow-sm border-0 h-100">
 
-          <h5>Total Jobs</h5>
+        <div class="card-body text-center">
+
+          <i class="bi bi-briefcase-fill display-4 text-warning mb-3"></i>
+
+          <h6 class="text-muted">Jobs</h6>
 
           <h2>{{ stats.jobs }}</h2>
 
@@ -61,12 +75,17 @@
 
       </div>
 
+    </div>
 
-      <div class="col-md-3">
+    <div class="col-lg-3 col-md-6">
 
-        <div class="card shadow border-0 p-4 text-center rounded-4">
+      <div class="card dashboard-card shadow-sm border-0 h-100">
 
-          <h5>Applications</h5>
+        <div class="card-body text-center">
+
+          <i class="bi bi-file-earmark-check-fill display-4 text-danger mb-3"></i>
+
+          <h6 class="text-muted">Applications</h6>
 
           <h2>{{ stats.applications }}</h2>
 
@@ -76,32 +95,38 @@
 
     </div>
 
+  </div>
 
-    <!-- COMPANIES -->
+  <!-- Companies -->
 
-    <div class="mb-3">
-      <input
-        v-model="companySearch"
-        class="form-control"
-        placeholder="Search company..."
-      >
-    </div>
+  <div class="card shadow-lg border-0 rounded-4 mb-5">
 
-    <div class="card shadow border-0 p-4 mb-5 rounded-4">
+    <div class="card-body">
 
-      <h3 class="mb-4">
-        Companies
-      </h3>
+      <div class="d-flex justify-content-between align-items-center mb-3">
 
-      <table class="table table-hover">
+        <h3>
+          <i class="bi bi-building me-2"></i>
+          Companies
+        </h3>
 
-        <thead>
+        <input
+          v-model="companySearch"
+          class="form-control w-25"
+          placeholder="Search company..."
+        >
+
+      </div>
+
+      <table class="table table-hover align-middle">
+
+        <thead class="table-light">
 
           <tr>
 
             <th>ID</th>
 
-            <th>Company Name</th>
+            <th>Company</th>
 
             <th>Status</th>
 
@@ -133,7 +158,7 @@
 
               <span
                 v-else
-                class="badge bg-warning text-dark"
+                class="badge bg-warning"
               >
                 Pending
               </span>
@@ -166,26 +191,35 @@
 
     </div>
 
+  </div>
 
-    <!-- STUDENTS -->
+  <!-- Students -->
 
-    <div class="mb-3">
-      <input
-        v-model="studentSearch"
-        class="form-control"
-        placeholder="Search student..."
-      >
-    </div>
+  <div class="card shadow-lg border-0 rounded-4">
 
-    <div class="card shadow border-0 p-4 rounded-4">
+    <div class="card-body">
 
-      <h3 class="mb-4">
-        Students
-      </h3>
+      <div class="d-flex justify-content-between align-items-center mb-3">
 
-      <table class="table table-hover">
+        <h3>
 
-        <thead>
+          <i class="bi bi-people-fill me-2"></i>
+
+          Students
+
+        </h3>
+
+        <input
+          v-model="studentSearch"
+          class="form-control w-25"
+          placeholder="Search student..."
+        >
+
+      </div>
+
+      <table class="table table-hover align-middle">
+
+        <thead class="table-light">
 
           <tr>
 
@@ -194,7 +228,7 @@
             <th>Name</th>
 
             <th>Status</th>
-            
+
             <th>Profile</th>
 
             <th>Actions</th>
@@ -210,56 +244,56 @@
             :key="student.id"
           >
 
-          <td>{{ student.id }}</td>
+            <td>{{ student.id }}</td>
 
-          <td>{{ student.full_name }}</td>
+            <td>{{ student.full_name }}</td>
 
-          <td>
+            <td>
 
-          <span
-          v-if="student.approved"
-          class="badge bg-success"
-          >
-          Approved
-          </span>
+              <span
+                v-if="student.approved"
+                class="badge bg-success"
+              >
+                Approved
+              </span>
 
-          <span
-          v-else
-          class="badge bg-warning text-dark"
-          >
-          Pending
-          </span>
+              <span
+                v-else
+                class="badge bg-warning text-dark"
+              >
+                Pending
+              </span>
 
-          </td>
+            </td>
 
-          <td>
+            <td>
 
-          <button
-          class="btn btn-info btn-sm"
-          @click="viewStudent(student)"
-          >
-          View Profile
-          </button>
+              <button
+                class="btn btn-info btn-sm"
+                @click="viewStudent(student)"
+              >
+                View Profile
+              </button>
 
-          </td>
+            </td>
 
-          <td>
+            <td>
 
-          <button
-          class="btn btn-success btn-sm me-2"
-          @click="approveStudent(student.id)"
-          >
-          Approve
-          </button>
+              <button
+                class="btn btn-success btn-sm me-2"
+                @click="approveStudent(student.id)"
+              >
+                Approve
+              </button>
 
-          <button
-          class="btn btn-danger btn-sm"
-          @click="deactivateStudent(student.id)"
-          >
-          Deactivate
-          </button>
+              <button
+                class="btn btn-danger btn-sm"
+                @click="deactivateStudent(student.id)"
+              >
+                Deactivate
+              </button>
 
-          </td>
+            </td>
 
           </tr>
 
@@ -270,6 +304,8 @@
     </div>
 
   </div>
+
+</div>
 
 </template>
 

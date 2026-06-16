@@ -1,0 +1,234 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Poppins",sans-serif;
+}
+
+body{
+
+    background:#eef2f7;
+    color:#1f2937;
+}
+
+#app{
+
+    min-height:100vh;
+}
+
+/* Cards */
+
+.card{
+
+    border:none !important;
+
+    border-radius:18px !important;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+    transition:.3s;
+}
+
+.card:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:0 15px 40px rgba(0,0,0,.12);
+}
+
+/* Buttons */
+
+.btn{
+
+    border-radius:10px;
+    font-weight:500;
+    transition:.25s;
+}
+
+.btn:hover{
+
+    transform:translateY(-2px);
+}
+
+/* Tables */
+
+.table{
+
+    vertical-align:middle;
+}
+
+.table thead{
+
+    background:#f8fafc;
+}
+
+.table-hover tbody tr:hover{
+
+    background:#edf4ff;
+}
+
+/* Inputs */
+
+.form-control{
+
+    border-radius:10px;
+
+    padding:12px;
+}
+
+.form-control:focus{
+
+    box-shadow:none;
+
+    border-color:#2563eb;
+}
+
+/* Badges */
+
+.badge{
+
+    font-size:.8rem;
+
+    padding:8px 12px;
+
+    border-radius:20px;
+}
+
+/* Headings */
+
+h1,h2,h3,h4{
+
+    font-weight:700;
+}
+
+/* Containers */
+
+.container{
+
+    padding-top:35px;
+    padding-bottom:35px;
+}
+
+.btn-primary{
+
+    background:#2563eb;
+    border:none;
+}
+
+.btn-primary:hover{
+
+    background:#1d4ed8;
+}
+
+.btn-success{
+
+    border:none;
+}
+
+.btn-danger{
+
+    border:none;
+}
+
+
+/* ========================= */
+/* NAVBAR */
+/* ========================= */
+
+.custom-navbar{
+
+    background:linear-gradient(
+        90deg,
+        #0f172a,
+        #1e3a8a
+    );
+
+    padding:12px 0;
+}
+
+.navbar-brand{
+
+    letter-spacing:.5px;
+}
+
+.nav-btn{
+
+    border-radius:12px;
+
+    padding:8px 16px;
+
+    transition:.3s;
+}
+
+.nav-btn:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 8px 18px rgba(0,0,0,.2);
+}
+
+.logout-btn{
+
+    border-radius:12px;
+
+    padding:8px 18px;
+}
+
+.logout-btn:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 8px 18px rgba(220,53,69,.35);
+}
+
+.navbar-toggler{
+
+    border:none;
+}
+
+.navbar-toggler:focus{
+
+    box-shadow:none;
+}
+
+.dashboard-card{
+
+    transition:.3s;
+
+    border-radius:18px;
+}
+
+.dashboard-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 20px 40px rgba(0,0,0,.15);
+}
+
+.table{
+
+    border-radius:12px;
+
+    overflow:hidden;
+}
+
+.table thead{
+
+    background:#0f172a;
+
+    color:white;
+}
+
+.btn{
+
+    border-radius:12px;
+
+    transition:.25s;
+}
+
+.btn:hover{
+
+    transform:translateY(-2px);
+}

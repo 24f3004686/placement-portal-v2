@@ -1,256 +1,648 @@
 <template>
 
-<div class="container mt-5">
+<div class="container py-5">
 
-<h1 class="text-warning fw-bold mb-4">
-Company Dashboard
-</h1>
+  <!-- HEADER -->
 
-<!-- CREATE JOB -->
+  <div class="d-flex justify-content-between align-items-center mb-5">
 
-<div class="card shadow border-0 p-4 rounded-4 mb-5">
+    <div>
 
-<h3 class="mb-4">Post New Job</h3>
+      <h1 class="fw-bold text-dark mb-1">
 
-<input v-model="title" class="form-control mb-3" placeholder="Job Title">
+        <i class="bi bi-building-fill text-warning me-2"></i>
 
-<input v-model="skills_required" class="form-control mb-3" placeholder="Skills Required">
+        Company Dashboard
 
-<input v-model="salary" class="form-control mb-3" placeholder="Salary">
+      </h1>
 
-<input v-model="benefits" class="form-control mb-3" placeholder="Benefits">
+      <p class="text-muted mb-0">
 
-<button class="btn btn-warning" @click="createJob">
-Create Job
-</button>
+        Manage your job postings and recruit talented students.
 
-</div>
+      </p>
 
-<!-- JOBS -->
+    </div>
 
-<div class="card shadow border-0 p-4 rounded-4 mb-5">
+    <span class="badge bg-warning text-dark px-4 py-2 fs-6 rounded-pill">
 
-<h3 class="mb-4">Posted Jobs</h3>
+      <i class="bi bi-patch-check-fill me-2"></i>
 
-<table class="table">
+      Recruiter Portal
 
-<thead>
-<tr>
-<th>ID</th>
-<th>Title</th>
-<th>Skills</th>
-<th>Salary</th>
-<th>Status</th>
-<th>Actions</th>
-</tr>
-</thead>
+    </span>
 
-<tbody>
+  </div>
 
-<tr v-for="job in jobs" :key="job.id">
+  <!-- SUMMARY CARDS -->
 
-<td>{{ job.id }}</td>
-<td>{{ job.title }}</td>
-<td>{{ job.skills_required }}</td>
-<td>{{ job.salary }}</td>
+  <div class="row g-4 mb-5">
 
-<td>
-<span
-v-if="job.status==='Active'"
-class="badge bg-success">
-Active
-</span>
+    <div class="col-lg-4 col-md-6">
 
-<span
-v-else
-class="badge bg-danger">
-Closed
-</span>
-</td>
+      <div class="card dashboard-card h-100">
 
-<td>
+        <div class="card-body text-center">
 
-<button
-v-if="job.status==='Active'"
-class="btn btn-warning btn-sm me-2"
-@click="closeJob(job.id)">
-Close
-</button>
+          <i class="bi bi-briefcase-fill display-4 text-warning mb-3"></i>
 
-<button
-v-else
-class="btn btn-success btn-sm me-2"
-@click="reopenJob(job.id)">
-Reopen
-</button>
+          <h6 class="text-muted">Jobs Posted</h6>
 
-<button
-class="btn btn-danger btn-sm"
-@click="deleteJob(job.id)">
-Delete
-</button>
+          <h2 class="fw-bold">{{ jobs.length }}</h2>
 
-</td>
+        </div>
 
-</tr>
+      </div>
 
-</tbody>
+    </div>
 
-</table>
+    <div class="col-lg-4 col-md-6">
 
-</div>
+      <div class="card dashboard-card h-100">
+
+        <div class="card-body text-center">
+
+          <i class="bi bi-people-fill display-4 text-primary mb-3"></i>
+
+          <h6 class="text-muted">Applications</h6>
+
+          <h2 class="fw-bold">{{ applications.length }}</h2>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-lg-4 col-md-12">
+
+      <div class="card dashboard-card h-100">
+
+        <div class="card-body text-center">
+
+          <i class="bi bi-award-fill display-4 text-success mb-3"></i>
+
+          <h6 class="text-muted">Placements</h6>
+
+          <h2 class="fw-bold">
+
+            {{ applications.filter(a => a.status === 'Placed').length }}
+
+          </h2>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- CREATE JOB -->
+
+  <div class="card shadow-lg border-0 rounded-4 mb-5">
+
+    <div class="card-body p-4">
+
+      <h3 class="fw-bold mb-4">
+
+        <i class="bi bi-plus-circle-fill text-warning me-2"></i>
+
+        Create New Job
+
+      </h3>
+
+      <div class="row">
+
+        <div class="col-md-6 mb-3">
+
+          <label class="form-label fw-semibold">
+
+            Job Title
+
+          </label>
+
+          <input
+
+            v-model="title"
+
+            class="form-control shadow-sm"
+
+            placeholder="Machine Learning Engineer"
+
+          >
+
+        </div>
+
+        <div class="col-md-6 mb-3">
+
+          <label class="form-label fw-semibold">
+
+            Skills Required
+
+          </label>
+
+          <input
+
+            v-model="skills_required"
+
+            class="form-control shadow-sm"
+
+            placeholder="Python, Flask, SQL"
+
+          >
+
+        </div>
+
+        <div class="col-md-6 mb-3">
+
+          <label class="form-label fw-semibold">
+
+            Salary
+
+          </label>
+
+          <input
+
+            v-model="salary"
+
+            class="form-control shadow-sm"
+
+            placeholder="12 LPA"
+
+          >
+
+        </div>
+
+        <div class="col-md-6 mb-3">
+
+          <label class="form-label fw-semibold">
+
+            Benefits
+
+          </label>
+
+          <input
+
+            v-model="benefits"
+
+            class="form-control shadow-sm"
+
+            placeholder="Health Insurance, Bonus"
+
+          >
+
+        </div>
+
+      </div>
+
+      <button
+
+        class="btn btn-warning px-4 py-2"
+
+        @click="createJob"
+
+      >
+
+        <i class="bi bi-plus-lg me-2"></i>
+
+        Create Job
+
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- POSTED JOBS -->
+
+  <div class="card shadow-lg border-0 rounded-4 mb-5">
+
+    <div class="card-body">
+
+      <h3 class="fw-bold mb-4">
+
+        <i class="bi bi-briefcase-fill text-primary me-2"></i>
+
+        Posted Jobs
+
+      </h3>
+
+      <div class="table-responsive">
+
+        <table class="table table-hover align-middle">
+
+          <thead class="table-dark">
+
+            <tr>
+
+              <th>ID</th>
+
+              <th>Title</th>
+
+              <th>Skills</th>
+
+              <th>Salary</th>
+
+              <th>Status</th>
+
+              <th>Actions</th>
+
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+            <tr
+              v-for="job in jobs"
+              :key="job.id"
+            >
+
+              <td>{{ job.id }}</td>
+
+              <td class="fw-semibold">{{ job.title }}</td>
+
+              <td>{{ job.skills_required }}</td>
+
+              <td>{{ job.salary }}</td>
+
+              <td>
+
+                <span
+                  v-if="job.status === 'Active'"
+                  class="badge rounded-pill bg-success"
+                >
+
+                  <i class="bi bi-check-circle-fill me-1"></i>
+
+                  Active
+
+                </span>
+
+                <span
+                  v-else
+                  class="badge rounded-pill bg-danger"
+                >
+
+                  <i class="bi bi-x-circle-fill me-1"></i>
+
+                  Closed
+
+                </span>
+
+              </td>
+
+              <td>
+
+                <button
+                  v-if="job.status === 'Active'"
+                  class="btn btn-warning btn-sm me-2"
+                  @click="closeJob(job.id)"
+                >
+
+                  <i class="bi bi-lock-fill"></i>
+
+                </button>
+
+                <button
+                  v-else
+                  class="btn btn-success btn-sm me-2"
+                  @click="reopenJob(job.id)"
+                >
+
+                  <i class="bi bi-arrow-clockwise"></i>
+
+                </button>
+
+                <button
+                  class="btn btn-danger btn-sm"
+                  @click="deleteJob(job.id)"
+                >
+
+                  <i class="bi bi-trash-fill"></i>
+
+                </button>
+
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </div>
 
 <!-- APPLICATIONS -->
 
-<div class="card shadow border-0 p-4 rounded-4">
+<!-- APPLICATIONS -->
 
-<h3 class="mb-4">
-Received Applications
-</h3>
+<div class="card shadow-lg border-0 rounded-4 mb-5">
 
-<button
-  class="btn btn-success mb-3"
-  @click="exportCSV"
->
-  Export Applications CSV
-</button>
+  <div class="card-body">
 
-<button
-  class="btn btn-success me-2"
-  @click="downloadPDF"
->
-  Download PDF
-</button>
+    <!-- Header -->
 
-<button
-  class="btn btn-warning"
-  @click="downloadHTML"
->
-  Download HTML
-</button>
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
 
-<table class="table">
+      <h3 class="fw-bold mb-3 mb-lg-0">
 
-<thead>
+        <i class="bi bi-people-fill text-primary me-2"></i>
 
-<tr>
+        Received Applications
 
-<th>Student</th>
+      </h3>
 
-<th>Job</th>
+      <div class="d-flex gap-2 flex-wrap">
 
-<th>Status</th>
+        <button
+          class="btn btn-success"
+          @click="exportCSV"
+        >
 
-<th>Interview Date</th>
+          <i class="bi bi-file-earmark-spreadsheet me-2"></i>
 
-<th>Feedback</th>
+          CSV
 
-<th>Actions</th>
+        </button>
 
-<th>Profile</th>
+        <button
+          class="btn btn-danger"
+          @click="downloadPDF"
+        >
 
-</tr>
+          <i class="bi bi-file-earmark-pdf me-2"></i>
 
-</thead>
+          PDF
 
-<tbody>
+        </button>
 
-<tr
-v-for="app in applications"
-:key="app.application_id"
->
+        <button
+          class="btn btn-warning"
+          @click="downloadHTML"
+        >
 
-<td>{{ app.student_name }}</td>
+          <i class="bi bi-filetype-html me-2"></i>
 
-<td>{{ app.job_title }}</td>
+          HTML
 
-<td>{{ app.status }}</td>
+        </button>
 
-<td>
-<input
-v-model="app.interview_date"
-type="date"
-class="form-control"
-/>
-</td>
+      </div>
 
-<td>
-<input
-v-model="app.feedback"
-class="form-control"
-placeholder="Feedback"
-/>
-</td>
+    </div>
 
-<td>
+    <!-- Applications Table -->
 
-<button
-class="btn btn-primary btn-sm me-1"
-@click="scheduleInterview(app)"
->
-Interview
-</button>
+    <div class="table-responsive">
 
-<button
-class="btn btn-info btn-sm me-1"
-@click="addFeedback(app)"
->
-Feedback
-</button>
+      <table class="table table-hover align-middle">
 
-<button
-class="btn btn-success btn-sm me-1"
-@click="updateStatus(app.application_id,'Shortlisted')"
->
-Shortlist
-</button>
+        <thead class="table-dark">
 
-<button
-class="btn btn-warning btn-sm me-1"
-@click="updateStatus(app.application_id,'Selected')"
->
-Select
-</button>
+          <tr>
 
-<button
-class="btn btn-danger btn-sm"
-@click="updateStatus(app.application_id,'Rejected')"
->
-Reject
-</button>
+            <th>Student</th>
 
-<button
-  class="btn btn-secondary btn-sm me-1"
-  @click="offer(app.application_id)"
->
-  Offer
-</button>
+            <th>Job</th>
 
-<button
-  class="btn btn-dark btn-sm"
-  @click="placed(app.application_id)"
->
-  Placed
-</button>
+            <th>Status</th>
 
-</td>
+            <th>Interview</th>
 
-<td>
+            <th>Feedback</th>
 
-  <button
-    class="btn btn-info btn-sm"
-    @click="viewStudent(app)"
-  >
-    View Profile
-  </button>
+            <th style="min-width:420px">
+              Recruitment Actions
+            </th>
 
-</td>
+            <th>Profile</th>
 
-</tr>
+          </tr>
 
-</tbody>
+        </thead>
 
-</table>
+        <tbody>
+
+          <tr
+            v-for="app in applications"
+            :key="app.application_id"
+          >
+
+            <!-- Student -->
+
+            <td class="fw-semibold">
+
+              <i class="bi bi-person-circle text-primary me-2"></i>
+
+              {{ app.student_name }}
+
+            </td>
+
+            <!-- Job -->
+
+            <td>
+
+              {{ app.job_title }}
+
+            </td>
+
+            <!-- Status -->
+
+            <td>
+
+              <span
+                class="badge rounded-pill"
+                :class="{
+                  'bg-primary': app.status==='Applied',
+                  'bg-info': app.status==='Interview Scheduled',
+                  'bg-success': app.status==='Placed',
+                  'bg-warning text-dark': app.status==='Selected',
+                  'bg-danger': app.status==='Rejected',
+                  'bg-secondary': app.status==='Shortlisted'
+                }"
+              >
+
+                {{ app.status }}
+
+              </span>
+
+            </td>
+
+            <!-- Interview -->
+
+            <td>
+
+              <input
+
+                v-model="app.interview_date"
+
+                type="date"
+
+                class="form-control shadow-sm"
+
+              >
+
+            </td>
+
+            <!-- Feedback -->
+
+            <td>
+
+              <input
+
+                v-model="app.feedback"
+
+                class="form-control shadow-sm"
+
+                placeholder="Add feedback"
+
+              >
+
+            </td>
+
+            <!-- Actions -->
+
+            <td>
+
+              <div class="d-flex flex-wrap gap-2">
+
+                <button
+
+                  class="btn btn-primary btn-sm rounded-pill"
+
+                  @click="scheduleInterview(app)"
+
+                >
+
+                  <i class="bi bi-calendar-event me-1"></i>
+
+                  Interview
+
+                </button>
+
+                <button
+
+                  class="btn btn-info btn-sm rounded-pill"
+
+                  @click="addFeedback(app)"
+
+                >
+
+                  <i class="bi bi-chat-left-text me-1"></i>
+
+                  Feedback
+
+                </button>
+
+                <button
+
+                  class="btn btn-success btn-sm rounded-pill"
+
+                  @click="updateStatus(app.application_id,'Shortlisted')"
+
+                >
+
+                  <i class="bi bi-check2-circle me-1"></i>
+
+                  Shortlist
+
+                </button>
+
+                <button
+
+                  class="btn btn-warning btn-sm rounded-pill"
+
+                  @click="updateStatus(app.application_id,'Selected')"
+
+                >
+
+                  <i class="bi bi-star-fill me-1"></i>
+
+                  Select
+
+                </button>
+
+                <button
+
+                  class="btn btn-secondary btn-sm rounded-pill"
+
+                  @click="offer(app.application_id)"
+
+                >
+
+                  <i class="bi bi-envelope-check me-1"></i>
+
+                  Offer
+
+                </button>
+
+                <button
+
+                  class="btn btn-dark btn-sm rounded-pill"
+
+                  @click="placed(app.application_id)"
+
+                >
+
+                  <i class="bi bi-award-fill me-1"></i>
+
+                  Placed
+
+                </button>
+
+                <button
+
+                  class="btn btn-danger btn-sm rounded-pill"
+
+                  @click="updateStatus(app.application_id,'Rejected')"
+
+                >
+
+                  <i class="bi bi-x-circle-fill me-1"></i>
+
+                  Reject
+
+                </button>
+
+              </div>
+
+            </td>
+
+            <!-- Profile -->
+
+            <td>
+
+              <button
+
+                class="btn btn-outline-primary btn-sm rounded-pill"
+
+                @click="viewStudent(app)"
+
+              >
+
+                <i class="bi bi-person-vcard me-1"></i>
+
+                Profile
+
+              </button>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
 
 </div>
 
