@@ -14,6 +14,7 @@ from extensions import db
 
 from models.company import Company
 from cache import cache
+from flask import request
 
 
 admin_bp = Blueprint(
@@ -103,8 +104,8 @@ def dashboard_stats():
     
 # GET ALL COMPANIES
 @admin_bp.route("/companies", methods=["GET"])
-@jwt_required()
 @cache.cached(timeout=60)
+@jwt_required()
 def get_companies():
 
     claims = get_jwt()
@@ -115,7 +116,17 @@ def get_companies():
             "message": "Access denied"
         }), 403
 
-    companies = Company.query.all()
+    search = request.args.get("search", "").strip()
+
+    query = Company.query
+
+    if search:
+
+        query = query.filter(
+            Company.company_name.ilike(f"%{search}%")
+        )
+
+    companies = query.all()
 
     company_list = []
 
@@ -165,8 +176,8 @@ def delete_company(id):
     
 # GET ALL STUDENTS
 @admin_bp.route("/students", methods=["GET"])
-@jwt_required()
 @cache.cached(timeout=60)
+@jwt_required()
 def get_students():
 
     claims = get_jwt()
@@ -177,7 +188,17 @@ def get_students():
             "message": "Access denied"
         }), 403
 
-    students = Student.query.all()
+    search = request.args.get("search", "").strip()
+
+    query = Student.query
+
+    if search:
+
+        query = query.filter(
+            Student.full_name.ilike(f"%{search}%")
+        )
+
+    students = query.all()
 
     student_list = []
 
@@ -188,7 +209,9 @@ def get_students():
             "id": student.id,
 
             "full_name": student.full_name,
-            
+
+            "approved": student.approved,
+
             "branch": student.branch,
 
             "cgpa": student.cgpa,
@@ -199,11 +222,9 @@ def get_students():
 
             "resume": student.resume
 
-
         })
 
     return jsonify(student_list), 200
-
 
 @admin_bp.route("/student/<int:student_id>")
 @jwt_required()
@@ -242,5 +263,49 @@ def generate_report():
 
     }), 202
 
+@admin_bp.route("/approve-student/<int:student_id>", methods=["PUT"])
+@jwt_required()
+def approve_student(student_id):
+
+    claims = get_jwt()
+
+    if claims["role"] != "admin":
+
+        return jsonify({
+            "message": "Access denied"
+        }), 403
+
+    student = Student.query.get_or_404(student_id)
+
+    student.approved = True
+
+    db.session.commit()
+
+    return jsonify({
+        "message": "Student approved"
+    }), 200
+    
+
+@admin_bp.route("/deapprove-student/<int:student_id>", methods=["PUT"])
+@jwt_required()
+def deapprove_student(student_id):
+
+    claims = get_jwt()
+
+    if claims["role"] != "admin":
+
+        return jsonify({
+            "message": "Access denied"
+        }), 403
+
+    student = Student.query.get_or_404(student_id)
+
+    student.approved = False
+
+    db.session.commit()
+
+    return jsonify({
+        "message": "Student deapproved"
+    }), 200
 
 

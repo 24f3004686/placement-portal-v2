@@ -17,7 +17,12 @@ class Student(db.Model):
         db.String(100),
         nullable=False
     )
-
+    
+    approved = db.Column(
+        db.Boolean,
+        default=False
+    )
+    
     branch = db.Column(db.String(100))
 
     cgpa = db.Column(db.Float)

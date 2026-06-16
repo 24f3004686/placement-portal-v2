@@ -8,6 +8,19 @@
 
     <!-- STATS -->
 
+    <div class="mb-4">
+
+    <button
+    class="btn btn-primary"
+    @click="generateReport"
+    >
+
+    Generate Monthly Report
+
+    </button>
+
+    </div>
+
     <div class="row mb-5">
 
       <div class="col-md-3">
@@ -66,6 +79,14 @@
 
     <!-- COMPANIES -->
 
+    <div class="mb-3">
+      <input
+        v-model="companySearch"
+        class="form-control"
+        placeholder="Search company..."
+      >
+    </div>
+
     <div class="card shadow border-0 p-4 mb-5 rounded-4">
 
       <h3 class="mb-4">
@@ -93,7 +114,7 @@
         <tbody>
 
           <tr
-            v-for="company in companies"
+            v-for="company in filteredCompanies"
             :key="company.id"
           >
 
@@ -148,6 +169,14 @@
 
     <!-- STUDENTS -->
 
+    <div class="mb-3">
+      <input
+        v-model="studentSearch"
+        class="form-control"
+        placeholder="Search student..."
+      >
+    </div>
+
     <div class="card shadow border-0 p-4 rounded-4">
 
       <h3 class="mb-4">
@@ -163,8 +192,12 @@
             <th>ID</th>
 
             <th>Name</th>
+
+            <th>Status</th>
             
             <th>Profile</th>
+
+            <th>Actions</th>
 
           </tr>
 
@@ -173,23 +206,60 @@
         <tbody>
 
           <tr
-            v-for="student in students"
+            v-for="student in filteredStudents"
             :key="student.id"
           >
 
-            <td>{{ student.id }}</td>
+          <td>{{ student.id }}</td>
 
-            <td>{{ student.full_name }}</td>
+          <td>{{ student.full_name }}</td>
 
-            <td>
-                 <button
-                       class="btn btn-info btn-sm"
-                       @click="viewStudent(student)"
-                  >
-                    View Profile
-                  </button>
+          <td>
 
-            </td>
+          <span
+          v-if="student.approved"
+          class="badge bg-success"
+          >
+          Approved
+          </span>
+
+          <span
+          v-else
+          class="badge bg-warning text-dark"
+          >
+          Pending
+          </span>
+
+          </td>
+
+          <td>
+
+          <button
+          class="btn btn-info btn-sm"
+          @click="viewStudent(student)"
+          >
+          View Profile
+          </button>
+
+          </td>
+
+          <td>
+
+          <button
+          class="btn btn-success btn-sm me-2"
+          @click="approveStudent(student.id)"
+          >
+          Approve
+          </button>
+
+          <button
+          class="btn btn-danger btn-sm"
+          @click="deactivateStudent(student.id)"
+          >
+          Deactivate
+          </button>
+
+          </td>
 
           </tr>
 
@@ -218,7 +288,11 @@ export default {
 
       companies: [],
 
-      students: []
+      students: [],
+
+      companySearch: "",
+
+      studentSearch: ""
 
     }
 
@@ -228,6 +302,34 @@ export default {
 
     await this.fetchDashboardData()
 
+  },
+
+  computed: {
+
+    filteredCompanies() {
+
+      return this.companies.filter(company =>
+
+        company.company_name
+        .toLowerCase()
+        .includes(this.companySearch.toLowerCase())
+
+      )
+
+    },
+
+    filteredStudents() {
+
+      return this.students.filter(student =>
+
+        student.full_name
+        .toLowerCase()
+        .includes(this.studentSearch.toLowerCase())
+
+      )
+
+    }
+ 
   },
 
   methods: {
@@ -353,6 +455,87 @@ export default {
       }
 
     },
+
+    async approveStudent(id) {
+
+      try {
+
+        const token = localStorage.getItem("token")
+
+        await axios.put(
+
+          `http://127.0.0.1:5000/admin/approve-student/${id}`,
+
+          {},
+
+          {
+
+            headers: {
+
+              Authorization: `Bearer ${token}`
+
+            }
+
+          }
+
+        )
+
+        alert("Student approved")
+
+        await this.fetchDashboardData()
+
+      }
+
+      catch(error) {
+
+        console.log(error)
+
+        alert("Approval failed")
+
+      }
+
+    },
+
+    async deactivateStudent(id) {
+
+      try {
+
+        const token = localStorage.getItem("token")
+
+        await axios.put(
+
+          `http://127.0.0.1:5000/admin/deactivate-student/${id}`,
+
+          {},
+
+          {
+
+            headers: {
+
+              Authorization: `Bearer ${token}`
+
+            }
+
+          }
+
+        )
+
+        alert("Student deactivated")
+
+        await this.fetchDashboardData()
+
+      }
+
+      catch(error) {
+
+        console.log(error)
+
+        alert("Operation failed")
+
+      }
+
+    },
+
 
     async generateReport() {
 
