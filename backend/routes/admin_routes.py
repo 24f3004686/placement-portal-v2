@@ -287,9 +287,9 @@ def approve_student(student_id):
     }), 200
     
 
-@admin_bp.route("/deapprove-student/<int:student_id>", methods=["PUT"])
+@admin_bp.route("/deactivate-student/<int:student_id>", methods=["PUT"])
 @jwt_required()
-def deapprove_student(student_id):
+def deactivate_student(student_id):
 
     claims = get_jwt()
 
@@ -306,7 +306,7 @@ def deapprove_student(student_id):
     db.session.commit()
 
     return jsonify({
-        "message": "Student deapproved"
+        "message": "Student deactivated"
     }), 200
 
 
