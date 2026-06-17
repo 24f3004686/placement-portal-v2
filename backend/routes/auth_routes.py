@@ -146,6 +146,17 @@ def login():
             return jsonify({
                 "message": "Company not approved by admin"
             }), 403
+            
+    if user.role == "student":
+
+        student = Student.query.filter_by(
+            user_id=user.id
+        ).first()
+
+        if student and not student.approved:
+            return jsonify({
+                "message": "Student account is awaiting admin approval."
+            }), 403
 
     access_token = create_access_token(
     identity=str(user.id),

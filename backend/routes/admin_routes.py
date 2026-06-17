@@ -338,3 +338,7 @@ def get_all_applications():
 
     return jsonify(application_list), 200
 
+
+
+
+
