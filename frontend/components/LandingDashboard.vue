@@ -14,7 +14,7 @@ Placement Portal
 
 <p class="lead text-muted">
 
-AI Powered Placement Management System
+Placement Management System
 
 </p>
 
