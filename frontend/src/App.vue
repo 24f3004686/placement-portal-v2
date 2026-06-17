@@ -13,7 +13,6 @@
         href="#"
       >
         <i class="bi bi-mortarboard-fill me-2 text-warning"></i>
-
         Placement Portal
       </a>
 
@@ -37,9 +36,21 @@
 
         <ul class="navbar-nav ms-auto align-items-lg-center">
 
-          <!-- LOGIN PAGE -->
+          <!-- LANDING PAGE -->
 
-          <template v-if="currentPage === 'login'">
+          <template v-if="currentPage === 'landing'">
+
+            <li class="nav-item mx-1">
+
+              <button
+                class="btn btn-primary nav-btn"
+                @click="changePage('login')"
+              >
+                <i class="bi bi-box-arrow-in-right me-1"></i>
+                Login
+              </button>
+
+            </li>
 
             <li class="nav-item mx-1">
 
@@ -48,7 +59,6 @@
                 @click="changePage('student-register')"
               >
                 <i class="bi bi-person-plus-fill me-1"></i>
-
                 Student Register
               </button>
 
@@ -61,7 +71,6 @@
                 @click="changePage('company-register')"
               >
                 <i class="bi bi-building-add me-1"></i>
-
                 Company Register
               </button>
 
@@ -123,10 +132,14 @@
 
           </template>
 
-          <!-- Logout -->
+          <!-- LOGOUT -->
 
           <li
-            v-if="currentPage !== 'login'"
+            v-if="
+              currentPage === 'admin' ||
+              currentPage === 'student' ||
+              currentPage === 'company'
+            "
             class="nav-item"
           >
 
@@ -151,7 +164,11 @@
 
   </nav>
 
-  <!-- Pages -->
+  <!-- PAGES -->
+
+  <LandingDashboard
+    v-if="currentPage === 'landing'"
+  />
 
   <Login
     v-if="currentPage === 'login'"
@@ -160,10 +177,12 @@
 
   <StudentRegister
     v-if="currentPage === 'student-register'"
+    @change-page="changePage"
   />
 
   <CompanyRegister
     v-if="currentPage === 'company-register'"
+    @change-page="changePage"
   />
 
   <AdminDashboard
@@ -194,6 +213,8 @@ import StudentDashboard from '../components/StudentDashboard.vue'
 
 import CompanyDashboard from '../components/CompanyDashboard.vue'
 
+import LandingDashboard from "../components/LandingDashboard.vue"
+
 export default {
 
   components: {
@@ -203,6 +224,7 @@ export default {
     CompanyRegister,
     AdminDashboard,
     StudentDashboard,
+    LandingDashboard,
     CompanyDashboard
 
   },
@@ -211,7 +233,7 @@ export default {
 
     return {
 
-      currentPage: "login"
+      currentPage: "landing"
 
     }
 

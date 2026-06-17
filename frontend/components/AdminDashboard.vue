@@ -97,6 +97,24 @@
 
   </div>
 
+  <div class="row g-4 mb-5">
+   
+    <div class="col-lg-8">
+
+      <ApplicationsChart />
+
+    </div>
+
+    <div class="col-lg-4">
+
+      <StatusChart 
+          :stats="placementStats"
+      />
+
+    </div>
+
+  </div>
+
   <!-- Companies -->
 
   <div class="card shadow-lg border-0 rounded-4 mb-5">
@@ -309,12 +327,20 @@
 
 </template>
 
-
 <script>
+
+import ApplicationsChart from "./charts/ApplicationsChart.vue"
+
+import StatusChart from "./charts/StatusChart.vue"
 
 import axios from "axios"
 
 export default {
+
+  components: {
+    ApplicationsChart,
+    StatusChart
+  },
 
   data() {
 
@@ -325,6 +351,8 @@ export default {
       companies: [],
 
       students: [],
+
+      applications: [],
 
       companySearch: "",
 
@@ -351,6 +379,33 @@ export default {
         .includes(this.companySearch.toLowerCase())
 
       )
+
+    },
+
+    placementStats() {
+
+        return {
+
+            placed: this.applications.filter(
+                a => a.status === "Placed"
+            ).length,
+
+            selected: this.applications.filter(
+                a => a.status === "Selected"
+            ).length,
+
+            rejected: this.applications.filter(
+                a => a.status === "Rejected"
+            ).length,
+
+            pending: this.applications.filter(
+                a =>
+                    a.status === "Pending" ||
+                    a.status === "Applied" ||
+                    a.status === "Shortlisted"
+            ).length
+
+        }
 
     },
 
@@ -420,6 +475,18 @@ export default {
         )
 
         this.students = studentsResponse.data
+
+        // APPLICATIONS
+
+        const applicationsResponse = await axios.get(
+
+            "http://127.0.0.1:5000/admin/applications",
+            
+            { headers }
+
+        )
+
+        this.applications = applicationsResponse.data
 
       }
 

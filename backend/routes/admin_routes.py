@@ -15,6 +15,7 @@ from extensions import db
 from models.company import Company
 from cache import cache
 from flask import request
+from models.application import Application
 
 
 admin_bp = Blueprint(
@@ -308,4 +309,32 @@ def deapprove_student(student_id):
         "message": "Student deapproved"
     }), 200
 
+
+@admin_bp.route("/applications", methods=["GET"])
+@jwt_required()
+def get_all_applications():
+
+    claims = get_jwt()
+
+    if claims["role"] != "admin":
+
+        return jsonify({
+            "message": "Access denied"
+        }), 403
+
+    applications = Application.query.all()
+
+    application_list = []
+
+    for app in applications:
+
+        application_list.append({
+
+            "id": app.id,
+
+            "status": app.status
+
+        })
+
+    return jsonify(application_list), 200
 

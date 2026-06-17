@@ -1,34 +1,98 @@
 <template>
 
-  <div class="container mt-5">
+  <div class="container py-5">
 
-    <h2 class="mb-4">Company Register</h2>
+    <div class="row justify-content-center">
 
-    <input
-      v-model="company_name"
-      class="form-control mb-3"
-      placeholder="Company Name"
-    >
+      <div class="col-lg-6 col-md-8">
 
-    <input
-      v-model="email"
-      class="form-control mb-3"
-      placeholder="Email"
-    >
+        <div class="card shadow-lg border-0 rounded-4 p-4">
 
-    <input
-      v-model="password"
-      type="password"
-      class="form-control mb-3"
-      placeholder="Password"
-    >
+          <!-- Header -->
 
-    <button
-      class="btn btn-success"
-      @click="register"
-    >
-      Register
-    </button>
+          <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <button
+              class="btn btn-outline-primary"
+              @click="$emit('change-page', 'login')"
+            >
+              <i class="bi bi-arrow-left me-2"></i>
+              Back to Login
+            </button>
+
+            <h2 class="fw-bold m-0">
+              Company Register
+            </h2>
+
+            <div style="width:140px"></div>
+
+          </div>
+
+          <!-- Company Name -->
+
+          <div class="mb-3">
+
+            <label class="form-label fw-semibold">
+              Company Name
+            </label>
+
+            <input
+              v-model="company_name"
+              class="form-control"
+              placeholder="Enter company name"
+            >
+
+          </div>
+
+          <!-- Email -->
+
+          <div class="mb-3">
+
+            <label class="form-label fw-semibold">
+              Company Email
+            </label>
+
+            <input
+              v-model="email"
+              type="email"
+              class="form-control"
+              placeholder="Enter company email"
+            >
+
+          </div>
+
+          <!-- Password -->
+
+          <div class="mb-4">
+
+            <label class="form-label fw-semibold">
+              Password
+            </label>
+
+            <input
+              v-model="password"
+              type="password"
+              class="form-control"
+              placeholder="Create a password"
+            >
+
+          </div>
+
+          <!-- Register -->
+
+          <button
+            class="btn btn-success w-100 py-2 fw-semibold"
+            @click="register"
+          >
+            <i class="bi bi-building-add me-2"></i>
+            Register Company
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
 
   </div>
 
