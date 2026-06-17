@@ -15,6 +15,7 @@ from routes.job_routes import job_bp
 from routes.student_routes import student_bp
 from cache import cache
 from routes.public_routes import public_bp
+from routes.ats_routes import ats_bp
 app = Flask(__name__)
 CORS(app)
 # Load config
@@ -42,6 +43,10 @@ app.register_blueprint(
     url_prefix="/student"
 )
 app.register_blueprint(public_bp, url_prefix="/public")
+app.register_blueprint(
+    ats_bp,
+    url_prefix="/ats"
+)
 
 
 @app.route("/")

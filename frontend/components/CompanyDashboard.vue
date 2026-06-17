@@ -642,6 +642,8 @@
 
     </div>
 
+    <ATSChecker />
+
   </div>
 
 </div>
@@ -654,27 +656,32 @@
 
 import axios from "axios"
 
+import ATSChecker from "./ATSChecker.vue"
 export default {
 
-data() {
+  components: {
+    ATSChecker
+  },
 
-return {
+  data() {
 
-title: "",
+    return {
 
-skills_required: "",
+      title: "",
 
-salary: "",
+      skills_required: "",
 
-benefits: "",
+      salary: "",
 
-jobs: [],
+      benefits: "",
 
-applications: []
+      jobs: [],
 
-}
+      applications: []
 
-},
+    }
+
+  },
 
 async mounted() {
 

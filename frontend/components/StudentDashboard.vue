@@ -255,6 +255,8 @@
     </div>
   </div>
 
+  <ATSChecker />
+
 </div> <!-- Close main container -->
 
 </template>
@@ -262,8 +264,14 @@
 <script>
 
 import axios from "axios"
+import ATSChecker from "./ATSChecker.vue"
+
 
 export default {
+
+  components: {
+    ATSChecker
+  },
 
   data() {
 
